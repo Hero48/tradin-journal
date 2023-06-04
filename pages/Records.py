@@ -150,4 +150,24 @@ for trade in trades:
         with right_column:
             display_trades()
    
-   
+st.markdown(
+    """
+    <style>
+    
+    .stButton button {
+        background-color: #007bff;
+        color: white;
+    }
+    .stButton button:hover {
+        background-color: #0069d9;
+        color: white;
+        border-color: #0069d9;
+    }
+    .stTextInput input {
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)

@@ -3,12 +3,20 @@ from database import *
 import pandas as pd
 import os
 
+ # Set page configuration
+st.set_page_config(
+    page_title="Trading Journal",
+    page_icon=":chart_with_upwards_trend:",
+    initial_sidebar_state="auto"
+    )
 
-st.title('Trading Journal')
+# Trading journal content
+st.title("Trading Journal")
+st.write("Welcome to your professional trading journal!")
 
 st.subheader('Record Trade')
-st.subheader('User')
-username = st.text_input('', placeholder='Username')
+st.subheader('Trade ID')
+username = st.text_input('', placeholder='ID')
 col1, col2 = st.columns(2)
 with col1:
     forex_pair = st.selectbox('Forex Pair', ['USDJPY', 'EUROUSD', 'GBPUSD'])
@@ -29,8 +37,8 @@ screenshot = st.file_uploader('Screenshot', type=['jpg', 'png', 'jpeg'])
 session = Session(bind=engine)
 # query Trade database by user and get the balance value of the last item if it is a vailable
 bal = session.query(Trade).filter_by(user=username).order_by(Trade.time.desc()).first()
-
-bal = bal.balance
+if bal:
+    bal = bal.balance
 def calculate_balance(balance):
     if balance is not None:
         if status == 'Won':
@@ -38,7 +46,7 @@ def calculate_balance(balance):
         else:
             return balance - (balance * 0.01)
     else:
-        return 100
+        return 100 + (100 * (risk_reward / 100))
 
 
 
@@ -71,3 +79,37 @@ if st.button('Save Trade'):
         session.commit()
 
     st.success('Trade saved')
+
+
+
+
+##################################################################################
+
+import streamlit as st
+
+def main():
+   
+
+    # Custom CSS styles
+    st.markdown(
+        """
+        <style>
+        
+        .stButton button {
+            background-color: #007bff;
+            color: white;
+        }
+        .stTextInput input {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    # Add more elements to your trading journal here
+
+if __name__ == "__main__":
+    main()
