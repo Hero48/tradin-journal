@@ -19,16 +19,16 @@ st.subheader('Trade ID')
 username = st.text_input('', placeholder='ID')
 col1, col2 = st.columns(2)
 with col1:
-    forex_pair = st.selectbox('Forex Pair', ['USDJPY', 'EUROUSD', 'GBPUSD'])
+    forex_pair = st.selectbox('Forex Pair', ['GBPUSD', 'EURUSD', 'EURGBP'])
     risk_reward = st.number_input('Profit Percentage')
-    trade_session = st.selectbox('Session', ['London', 'Asian', 'NewYork'])
-    status = st.selectbox('Status', ['Won', 'Lost', 'Break Even'])
+    trade_session = st.selectbox('Session', ['NewYork', 'London', 'Asian'])
+    status = st.selectbox('Status', ['Won', 'Lost'])
 
 with col2:
     buy_sell = st.selectbox('Buy/Sell', ['Buy', 'Sell'])
     time = st.time_input('Time')
     trade_date = st.date_input('Date')
-    confirmation = st.multiselect('Confirmation', ['LQS', 'MSS', 'Displacement', 'FVG'])
+    confirmation = st.multiselect('Confirmation', ['LQS', 'CHoCH', 'Displacement', 'FVG'])
 
 
 comments = st.text_area('Comments')
@@ -52,33 +52,36 @@ def calculate_balance(balance):
 
 
 if st.button('Save Trade'):
-    image_name = screenshot.name
-    with open(os.path.join("./images", image_name), "wb") as f:
-        f.write(screenshot.getbuffer())
-    image_path = os.path.join("./images", image_name)
-    balance = calculate_balance(bal)
-    st.subheader(balance)
+    if username == '':
+        st.error('Please enter your ID')
+    else:
+        image_name = screenshot.name
+        with open(os.path.join("./images", image_name), "wb") as f:
+            f.write(screenshot.getbuffer())
+        image_path = os.path.join("./images", image_name)
+        balance = calculate_balance(bal)
+        st.subheader(balance)
 
-    # Create a trade object and populate its attributes with the user inputs
-    trade = Trade(forex_pair=forex_pair,
-                  user=username,
-                  risk_reward=risk_reward,
-                  time=datetime.now(),
-                  session=trade_session,
-                  buy_sell=buy_sell,
-                  trade_date=trade_date,
-                  confirmation=', '.join(confirmation),
-                  comments=comments, 
-                  screenshot=image_name,
-                  balance=balance,
-                  status=status)
+        # Create a trade object and populate its attributes with the user inputs
+        trade = Trade(forex_pair=forex_pair,
+                    user=username,
+                    risk_reward=risk_reward,
+                    time=datetime.now(),
+                    session=trade_session,
+                    buy_sell=buy_sell,
+                    trade_date=trade_date,
+                    confirmation=', '.join(confirmation),
+                    comments=comments, 
+                    screenshot=image_name,
+                    balance=balance,
+                    status=status)
 
-    # Add the trade object to the database
-    with Session(engine) as session:
-        session.add(trade)
-        session.commit()
+        # Add the trade object to the database
+        with Session(engine) as session:
+            session.add(trade)
+            session.commit()
 
-    st.success('Trade saved')
+        st.success('Trade saved')
 
 
 
