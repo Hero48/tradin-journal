@@ -21,15 +21,10 @@ class Trade(Base):
     confirmation = Column(Text)
     comments = Column(Text)
     screenshot = Column(String(30))
-    balance = Column(Float)
+    balance = Column(Float, default=100)
     status = Column(String(10))
 
-class Balance(Base):
-    __tablename__ = 'balance'
 
-    id = Column(Integer, primary_key=True)
-    user = Column(String)
-    balance = Column(Float, default=10)
 
 # Create a database engine
 engine = create_engine('sqlite:///trades.db')
