@@ -4,7 +4,7 @@ import streamlit as st
 
 # Display a line chart of records from the database
 st.subheader('Trade ID')
-username = st.text_input('', placeholder='Username')
+username = st.text_input('', placeholder='ID')
 
 
 # Query the database for all trades by User
